@@ -1,6 +1,8 @@
 ## ;TLDR
 
-An app to ...
+An app to request an invitation
+
+Broccoli & Co., an upcoming online service company, would like to let people to "Request an invitation" on their website.
 
 Deployed app at [link here]()
 
