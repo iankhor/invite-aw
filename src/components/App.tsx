@@ -8,17 +8,20 @@ import { RequestPayload } from '../types'
 const URL = 'https://l94wc2001h.execute-api.ap-southeast-2.amazonaws.com/prod/fake-auth'
 
 function useRequestInvite() {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState<boolean | null>(null)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   async function request(payload: RequestPayload) {
+    setLoading(true)
     try {
       await axios.post(URL, payload)
 
       setSuccess(true)
+      setLoading(false)
     } catch (e) {
       setSuccess(false)
+      setLoading(false)
       setError(e.response.data.errorMessage)
     }
   }
@@ -31,7 +34,7 @@ function useRequestInvite() {
   }
 }
 
-function InviteForm({ form, fieldChange, requestInvite, error }: any) {
+function InviteForm({ form, fieldChange, requestInvite, error, loading }: any) {
   return (
     <Form>
       <Form.Group controlId="name">
@@ -50,7 +53,7 @@ function InviteForm({ form, fieldChange, requestInvite, error }: any) {
       </Form.Group>
 
       <Button variant="primary" block onClick={requestInvite}>
-        Send
+        {loading ? 'Sending, please wait.' : 'Send'}
       </Button>
 
       <Form.Text className="text-muted">{error}</Form.Text>
@@ -107,7 +110,13 @@ export default function App() {
           {success ? (
             <Success />
           ) : (
-            <InviteForm form={form} fieldChange={fieldChange} requestInvite={requestInvite} error={error} />
+            <InviteForm
+              form={form}
+              fieldChange={fieldChange}
+              requestInvite={requestInvite}
+              error={error}
+              loading={loading}
+            />
           )}
         </Modal.Body>
       </Modal>

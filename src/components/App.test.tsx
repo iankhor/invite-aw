@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen, waitFor, within } from '@testing-library/react'
+import { render, screen, waitFor, waitForElementToBeRemoved, within } from '@testing-library/react'
 import user from '@testing-library/user-event'
 import App from './App'
 import { rest } from 'msw'
@@ -58,6 +58,22 @@ describe('requesting an invite', () => {
 
     return { inviteModal, nameField, emailField, confirmEmailField, sendButton }
   }
+
+  describe('while requesting an invite', () => {
+    it('shows a message while an invite is being requested', async () => {
+      setupMock()
+      const { inviteModal, sendButton } = populateRequestForm()
+      user.click(sendButton)
+
+      const loadingButton = inviteModal.getByRole('button', { name: /sending, please wait/i })
+
+      await waitFor(() => {
+        expect(loadingButton).toBeInTheDocument()
+      })
+
+      await waitForElementToBeRemoved(loadingButton)
+    })
+  })
 
   describe('sucessfully requesting an invite', () => {
     it('shows a confirmation message about the invite', async () => {
