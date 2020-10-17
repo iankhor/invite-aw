@@ -3,25 +3,23 @@ import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import Form from 'react-bootstrap/Form'
 import axios from 'axios'
+import { RequestPayload } from '../types'
 
 const URL = 'https://l94wc2001h.execute-api.ap-southeast-2.amazonaws.com/prod/fake-auth'
-
-type RequestPayload = {
-  name?: string
-  email?: string
-}
 
 function useRequestInvite() {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   async function request(payload: RequestPayload) {
     try {
       await axios.post(URL, payload)
 
       setSuccess(true)
-    } catch {
+    } catch (e) {
       setSuccess(false)
+      setError(e.response.data.errorMessage)
     }
   }
 
@@ -29,10 +27,11 @@ function useRequestInvite() {
     request,
     loading,
     success,
+    error,
   }
 }
 
-function InviteForm({ form, fieldChange, requestInvite }: any) {
+function InviteForm({ form, fieldChange, requestInvite, error }: any) {
   return (
     <Form>
       <Form.Group controlId="name">
@@ -53,6 +52,8 @@ function InviteForm({ form, fieldChange, requestInvite }: any) {
       <Button variant="primary" block onClick={requestInvite}>
         Send
       </Button>
+
+      <Form.Text className="text-muted">{error}</Form.Text>
     </Form>
   )
 }
@@ -64,10 +65,10 @@ function Success() {
 export default function App() {
   const [open, setOpen] = useState<boolean>(false)
   const [form, setForm] = useState<RequestPayload>({})
-  const { request, loading, success } = useRequestInvite()
+  const { request, loading, success, error } = useRequestInvite()
 
   function fieldChange(key: keyof RequestPayload) {
-    return (e: any) =>
+    return (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>): void =>
       setForm({
         ...form,
         [key]: e.target.value,
@@ -103,7 +104,11 @@ export default function App() {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {success ? <Success /> : <InviteForm form={form} fieldChange={fieldChange} requestInvite={requestInvite} />}
+          {success ? (
+            <Success />
+          ) : (
+            <InviteForm form={form} fieldChange={fieldChange} requestInvite={requestInvite} error={error} />
+          )}
         </Modal.Body>
       </Modal>
     </>
