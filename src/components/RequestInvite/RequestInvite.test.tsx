@@ -109,16 +109,22 @@ describe('requesting an invite', () => {
   })
 
   describe('field errors', () => {
+    function subject(fieldName: any, value: any) {
+      render(<RequestInvite show={true} />)
+
+      const inviteModal = within(screen.getByRole('dialog', { name: /request an invite/i }))
+
+      const field = inviteModal.getByRole('textbox', { name: fieldName })
+      user.type(field, value)
+      user.tab()
+
+      return { inviteModal }
+    }
+
     describe('whenname', () => {
       describe('when its less or equal to 3 characters', () => {
         it('shows inline error', () => {
-          render(<RequestInvite show={true} />)
-
-          const inviteModal = within(screen.getByRole('dialog', { name: /request an invite/i }))
-
-          const nameField = inviteModal.getByRole('textbox', { name: /name/i })
-          user.type(nameField, '12')
-          user.tab()
+          const { inviteModal } = subject('Name', '12')
 
           expect(inviteModal.getByRole('textbox', { name: /name/i })).toBeInvalid()
         })
@@ -128,32 +134,18 @@ describe('requesting an invite', () => {
     describe('email', () => {
       describe('not entered', () => {
         it('shows inline error', () => {
-          render(<RequestInvite show={true} />)
+          const { inviteModal } = subject('Email', '12')
 
-          const inviteModal = within(screen.getByRole('dialog', { name: /request an invite/i }))
-
-          const emailField = inviteModal.getByRole('textbox', { name: 'Email' })
-          user.type(emailField, 'not valid email')
-          user.tab()
-
-          expect(emailField).toBeInvalid()
+          expect(inviteModal.getByRole('textbox', { name: 'Email' })).toBeInvalid()
         })
       })
     })
 
     describe('when email and confirm email are not the same', () => {
       it('shows inline error', () => {
-        render(<RequestInvite show={true} />)
+        const { inviteModal } = subject('Confirm email', '12')
 
-        const inviteModal = within(screen.getByRole('dialog', { name: /request an invite/i }))
-
-        const emailField = inviteModal.getByRole('textbox', { name: 'Email' })
-        const confirmEmailField = inviteModal.getByRole('textbox', { name: 'Confirm email' })
-        user.type(emailField, 'foobaz@email.com')
-        user.click(confirmEmailField)
-        user.tab()
-
-        expect(confirmEmailField).toBeInvalid()
+        expect(inviteModal.getByRole('textbox', { name: 'Confirm email' })).toBeInvalid()
       })
     })
   })
