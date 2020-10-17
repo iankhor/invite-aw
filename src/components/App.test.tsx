@@ -32,54 +32,38 @@ function setupMock() {
 }
 
 describe('requesting an invite', () => {
-  it('has a request for invite button', () => {
+  function populateRequestForm(formOverides: any = {}) {
+    const form = {
+      name: 'myname',
+      email: 'email@email.com',
+      confirmEmail: 'email@email.com',
+      ...formOverides,
+    }
+
     render(<App />)
-
-    const inviteButton = screen.getByRole('button', { name: /request an invite/i })
-    expect(inviteButton).toBeInTheDocument()
-  })
-
-  it('shows a modal with a form when click on request for invite button', () => {
-    render(<App />)
-
-    expect(screen.queryByRole('dialog', { name: /request an invite/i })).not.toBeInTheDocument()
 
     const inviteButton = screen.getByRole('button', { name: /request an invite/i })
     user.click(inviteButton)
 
-    expect(screen.getByRole('dialog', { name: /request an invite/i })).toBeVisible()
+    const inviteModal = within(screen.getByRole('dialog', { name: /request an invite/i }))
 
-    const nameField = screen.getByRole('textbox', { name: /name/i })
-    const emailField = screen.getByRole('textbox', { name: 'Email' })
-    const confirmEmailField = screen.getByRole('textbox', { name: 'Confirm email' })
+    const nameField = inviteModal.getByRole('textbox', { name: /name/i })
+    const emailField = inviteModal.getByRole('textbox', { name: 'Email' })
+    const confirmEmailField = inviteModal.getByRole('textbox', { name: 'Confirm email' })
+    const sendButton = inviteModal.getByRole('button', { name: /send/i })
 
-    user.type(nameField, 'my name')
-    user.type(emailField, 'email@email.com')
-    user.type(confirmEmailField, 'email@email.com')
+    user.type(nameField, form.name)
+    user.type(emailField, form.email)
+    user.type(confirmEmailField, form.confirmEmail)
 
-    expect(nameField).toHaveValue('my name')
-    expect(emailField).toHaveValue('email@email.com')
-    expect(confirmEmailField).toHaveValue('email@email.com')
-  })
+    return { inviteModal, nameField, emailField, confirmEmailField, sendButton }
+  }
 
   describe('sucessfully requesting an invite', () => {
     it('shows a confirmation message about the invite', async () => {
       setupMock()
-      render(<App />)
+      const { sendButton } = populateRequestForm()
 
-      const inviteButton = screen.getByRole('button', { name: /request an invite/i })
-      user.click(inviteButton)
-
-      const inviteModal = within(screen.getByRole('dialog', { name: /request an invite/i }))
-
-      const nameField = inviteModal.getByRole('textbox', { name: /name/i })
-      const emailField = inviteModal.getByRole('textbox', { name: 'Email' })
-      const confirmEmailField = inviteModal.getByRole('textbox', { name: 'Confirm email' })
-      const sendButton = inviteModal.getByRole('button', { name: /send/i })
-
-      user.type(nameField, 'my name')
-      user.type(emailField, 'email@email.com')
-      user.type(confirmEmailField, 'email@email.com')
       user.click(sendButton)
 
       await waitFor(() => {
@@ -89,22 +73,13 @@ describe('requesting an invite', () => {
   })
 
   describe('failure when requesting an invite', () => {
-    it('shows a confirmation message about the invite', async () => {
+    it('shows an error message', async () => {
       setupMock()
-      render(<App />)
+      const { inviteModal, sendButton } = populateRequestForm({
+        email: 'usedemail@airwallex.com',
+        confirmEmail: 'usedemail@airwallex.com',
+      })
 
-      const inviteButton = screen.getByRole('button', { name: /request an invite/i })
-      user.click(inviteButton)
-      const inviteModal = within(screen.getByRole('dialog', { name: /request an invite/i }))
-
-      const nameField = inviteModal.getByRole('textbox', { name: /name/i })
-      const emailField = inviteModal.getByRole('textbox', { name: 'Email' })
-      const confirmEmailField = inviteModal.getByRole('textbox', { name: 'Confirm email' })
-      const sendButton = inviteModal.getByRole('button', { name: /send/i })
-
-      user.type(nameField, 'my name')
-      user.type(emailField, 'usedemail@airwallex.com')
-      user.type(confirmEmailField, 'usedemail@airwallex.com')
       user.click(sendButton)
 
       await waitFor(() => {
