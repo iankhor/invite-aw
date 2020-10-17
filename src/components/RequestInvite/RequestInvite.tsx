@@ -26,7 +26,7 @@ function isShort(str?: string) {
 
 function validatorFor(property: string, value: string | null = null, comparedValue: string | null = null) {
   const validators = {
-    name: [isBlank, isShort],
+    name: [isShort],
     email: [isEmailValid],
     confirmEmail: [() => isSameValue(value, comparedValue)],
     default: [],

@@ -133,7 +133,7 @@ describe('requesting an invite', () => {
           const inviteModal = within(screen.getByRole('dialog', { name: /request an invite/i }))
 
           const emailField = inviteModal.getByRole('textbox', { name: 'Email' })
-          user.click(emailField)
+          user.type(emailField, 'not valid email')
           user.tab()
 
           expect(emailField).toBeInvalid()
