@@ -109,17 +109,33 @@ describe('requesting an invite', () => {
   })
 
   describe('field errors', () => {
-    describe('when no name was entered', () => {
-      it('shows inline error', () => {
-        render(<RequestInvite show={true} />)
+    describe('whenname', () => {
+      describe('when nothing entered', () => {
+        it('shows inline error', () => {
+          render(<RequestInvite show={true} />)
 
-        const inviteModal = within(screen.getByRole('dialog', { name: /request an invite/i }))
+          const inviteModal = within(screen.getByRole('dialog', { name: /request an invite/i }))
 
-        const nameField = inviteModal.getByRole('textbox', { name: /name/i })
-        user.click(nameField)
-        user.tab()
+          const nameField = inviteModal.getByRole('textbox', { name: /name/i })
+          user.click(nameField)
+          user.tab()
 
-        expect(nameField).toBeInvalid()
+          expect(nameField).toBeInvalid()
+        })
+      })
+
+      describe('when its less or equal to 3 characters', () => {
+        it('shows inline error', () => {
+          render(<RequestInvite show={true} />)
+
+          const inviteModal = within(screen.getByRole('dialog', { name: /request an invite/i }))
+
+          const nameField = inviteModal.getByRole('textbox', { name: /name/i })
+          user.type(nameField, '12')
+          user.tab()
+
+          expect(inviteModal.getByRole('textbox', { name: /name/i })).toBeInvalid()
+        })
       })
     })
 
