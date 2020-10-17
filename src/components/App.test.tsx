@@ -5,11 +5,14 @@ import App from './App'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
 import { RequestPayload } from '../types'
+import { URL } from './../hooks/useRequestInvite'
+import axios from 'axios'
 
-const URL = 'https://l94wc2001h.execute-api.ap-southeast-2.amazonaws.com/prod/fake-auth'
+const requestSpy = jest.spyOn(axios, 'post')
 
 const server = setupServer()
 beforeAll(() => server.listen())
+beforeEach(() => jest.clearAllMocks())
 afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
@@ -68,6 +71,7 @@ describe('requesting an invite', () => {
       const loadingButton = inviteModal.getByRole('button', { name: /sending, please wait/i })
 
       await waitFor(() => {
+        expect(requestSpy).toHaveBeenCalledTimes(1)
         expect(loadingButton).toBeInTheDocument()
       })
 
@@ -84,6 +88,7 @@ describe('requesting an invite', () => {
 
       await waitFor(() => {
         expect(screen.getByRole('dialog', { name: /all done/i })).toBeVisible()
+        expect(requestSpy).toHaveBeenCalledTimes(1)
       })
     })
   })
@@ -101,6 +106,7 @@ describe('requesting an invite', () => {
       await waitFor(() => {
         expect(screen.queryByRole('dialog', { name: /all done/i })).not.toBeInTheDocument()
         expect(inviteModal.getByText('An invite has sent to this email before. Please use another email'))
+        expect(requestSpy).toHaveBeenCalledTimes(1)
       })
     })
   })

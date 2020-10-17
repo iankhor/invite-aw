@@ -2,37 +2,8 @@ import React, { useState, ChangeEvent } from 'react'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import Form from 'react-bootstrap/Form'
-import axios from 'axios'
 import { RequestPayload } from '../types'
-
-const URL = 'https://l94wc2001h.execute-api.ap-southeast-2.amazonaws.com/prod/fake-auth'
-
-function useRequestInvite() {
-  const [loading, setLoading] = useState<boolean | null>(null)
-  const [success, setSuccess] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  async function request(payload: RequestPayload) {
-    setLoading(true)
-    try {
-      await axios.post(URL, payload)
-
-      setSuccess(true)
-      setLoading(false)
-    } catch (e) {
-      setSuccess(false)
-      setLoading(false)
-      setError(e.response.data.errorMessage)
-    }
-  }
-
-  return {
-    request,
-    loading,
-    success,
-    error,
-  }
-}
+import useRequestInvite from './../hooks/useRequestInvite'
 
 function InviteForm({ form, fieldChange, requestInvite, error, loading }: any) {
   return (
