@@ -8,7 +8,7 @@ function Success() {
   return <div>All done !!!</div>
 }
 
-export default function RequestInvite({ open, handleClose }: any) {
+export default function RequestInvite({ show, handleClose }: any) {
   const [form, setForm] = useState<RequestPayload>({})
   const { request, loading, success, error } = useRequestInvite()
 
@@ -29,7 +29,7 @@ export default function RequestInvite({ open, handleClose }: any) {
       <Modal
         aria-labelledby={success ? 'success' : 'request-an-invite'}
         role="dialog"
-        show={open}
+        show={show}
         onHide={handleClose}
         animation={false}
       >

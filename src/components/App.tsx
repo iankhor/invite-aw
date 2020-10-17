@@ -9,7 +9,7 @@ export default function App() {
     <>
       <Button onClick={() => setOpen(true)}>Request an invite</Button>
 
-      <RequestInvite open={open} handleClose={() => setOpen(false)} />
+      <RequestInvite show={open} handleClose={() => setOpen(false)} />
     </>
   )
 }

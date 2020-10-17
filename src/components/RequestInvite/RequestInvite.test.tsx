@@ -1,11 +1,11 @@
 import React from 'react'
 import { render, screen, waitFor, waitForElementToBeRemoved, within } from '@testing-library/react'
 import user from '@testing-library/user-event'
-import App from './App'
+import RequestInvite from './RequestInvite'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
-import { RequestPayload } from '../types'
-import { URL } from './../hooks/useRequestInvite'
+import { RequestPayload } from '../../types'
+import { URL } from './../../hooks/useRequestInvite'
 import axios from 'axios'
 
 const requestSpy = jest.spyOn(axios, 'post')
@@ -43,10 +43,7 @@ describe('requesting an invite', () => {
       ...formOverides,
     }
 
-    render(<App />)
-
-    const inviteButton = screen.getByRole('button', { name: /request an invite/i })
-    user.click(inviteButton)
+    render(<RequestInvite show={true} />)
 
     const inviteModal = within(screen.getByRole('dialog', { name: /request an invite/i }))
 
