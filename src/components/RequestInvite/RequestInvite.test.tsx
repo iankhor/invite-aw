@@ -88,6 +88,8 @@ describe('requesting an invite', () => {
         expect(requestSpy).toHaveBeenCalledTimes(1)
       })
     })
+
+    it.todo('requesting another invite')
   })
 
   describe('failure when requesting an invite', () => {
@@ -106,6 +108,8 @@ describe('requesting an invite', () => {
         expect(requestSpy).toHaveBeenCalledTimes(1)
       })
     })
+
+    it.todo('retrying a request')
   })
 
   describe('field errors', () => {
@@ -148,5 +152,7 @@ describe('requesting an invite', () => {
         expect(inviteModal.getByRole('textbox', { name: 'Confirm email' })).toBeInvalid()
       })
     })
+
+    it.todo('does not allow request to be sent')
   })
 })
