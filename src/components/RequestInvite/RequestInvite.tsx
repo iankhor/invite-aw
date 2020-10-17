@@ -15,11 +15,14 @@ function isBlank(str?: string) {
 function isSameValue(valueOne?: string | null, valueTwo?: string | null) {
   return valueOne && valueTwo && valueOne === valueTwo ? null : 'different'
 }
+function isEmailValid(email?: string) {
+  return email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? null : 'invalid'
+}
 
 function validatorFor(property: string, value: string | null = null, comparedValue: string | null = null) {
   const validators = {
     name: [isBlank],
-    email: [isBlank],
+    email: [isEmailValid],
     confirmEmail: [() => isSameValue(value, comparedValue)],
     default: [],
   } as Record<string, any>

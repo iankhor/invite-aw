@@ -123,17 +123,19 @@ describe('requesting an invite', () => {
       })
     })
 
-    describe('when no email was entered', () => {
-      it('shows inline error', () => {
-        render(<RequestInvite show={true} />)
+    describe('email', () => {
+      describe('not entered', () => {
+        it('shows inline error', () => {
+          render(<RequestInvite show={true} />)
 
-        const inviteModal = within(screen.getByRole('dialog', { name: /request an invite/i }))
+          const inviteModal = within(screen.getByRole('dialog', { name: /request an invite/i }))
 
-        const emailField = inviteModal.getByRole('textbox', { name: 'Email' })
-        user.click(emailField)
-        user.tab()
+          const emailField = inviteModal.getByRole('textbox', { name: 'Email' })
+          user.click(emailField)
+          user.tab()
 
-        expect(emailField).toBeInvalid()
+          expect(emailField).toBeInvalid()
+        })
       })
     })
 
