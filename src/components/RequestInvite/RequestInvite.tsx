@@ -74,7 +74,7 @@ export default function RequestInvite({ show, handleClose }: any) {
     const { confirmEmail, ...payload } = form
     request(payload)
 
-    // TODO: specs
+    // TODO: specs for If the user clicks Send and one or more fields do not validate properly, the app should not contact the backend
     // const hasInteractedForm = Object.keys(formErrors || {}).length > 0
     // const isFormValid = Object.values(formErrors).every((e: any) => e.length === 0)
 
