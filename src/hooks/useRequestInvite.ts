@@ -6,8 +6,14 @@ export const URL = 'https://l94wc2001h.execute-api.ap-southeast-2.amazonaws.com/
 
 export default function useRequestInvite() {
   const [loading, setLoading] = useState<boolean | null>(null)
-  const [success, setSuccess] = useState(false)
+  const [success, setSuccess] = useState<boolean | null>(false)
   const [error, setError] = useState<string | null>(null)
+
+  function reset() {
+    setLoading(null)
+    setSuccess(null)
+    setError(null)
+  }
 
   async function request(payload: RequestPayload) {
     setLoading(true)
@@ -28,5 +34,6 @@ export default function useRequestInvite() {
     loading,
     success,
     error,
+    reset
   }
 }

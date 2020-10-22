@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from 'react'
+import React, { useState, ChangeEvent, useEffect } from 'react'
 import Modal from 'react-bootstrap/Modal'
 import { InviteForm as Form } from '../../types'
 import useRequestInvite from './../../hooks/useRequestInvite'
@@ -50,7 +50,14 @@ export default function RequestInvite({ show, handleClose }: any) {
   const [form, setForm] = useState<Form>({})
   const [formErrors, setFormErrors] = useState({})
 
-  const { request, loading, success, error: serverError } = useRequestInvite()
+  const { request, loading, success, error: serverError, reset } = useRequestInvite()
+
+  // TODO: specs for retry request
+  // function resetForm() {
+  //   setForm({})
+  //   setFormErrors({})
+  //   reset()
+  // }
 
   function fieldChange(key: keyof Form) {
     return (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>): void =>
@@ -83,6 +90,10 @@ export default function RequestInvite({ show, handleClose }: any) {
     //   request(payload)
     // }
   }
+
+  // useEffect(() => {
+  //   if(show) resetForm()
+  // }, [show])
 
   return (
     <>
