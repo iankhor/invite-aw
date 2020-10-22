@@ -11,7 +11,7 @@ export default function App() {
     <>
       <NavigationBar />
       <Main requestInvite={() => setOpen(true)}/>
-      <RequestInvite show={open} handleClose={() => setOpen(false)} />
+      <RequestInvite show={open} handleClose={() => {setOpen(false)}} />
       <Footer />
     </>
   )

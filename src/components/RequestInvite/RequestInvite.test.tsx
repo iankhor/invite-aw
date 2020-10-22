@@ -34,6 +34,8 @@ function setupMock() {
   )
 }
 
+beforeEach(() => { jest.clearAllMocks() })
+
 describe('requesting an invite', () => {
   function populateRequestForm(formOverides: any = {}) {
     const form = {
@@ -43,7 +45,9 @@ describe('requesting an invite', () => {
       ...formOverides,
     }
 
-    render(<RequestInvite show={true} />)
+    const handleCloseSpy = jest.fn()
+
+    render(<RequestInvite show={true} handleClose={handleCloseSpy}/>)
 
     const inviteModal = within(screen.getByRole('dialog', { name: /request an invite/i }))
 
@@ -56,7 +60,7 @@ describe('requesting an invite', () => {
     user.type(emailField, form.email)
     user.type(confirmEmailField, form.confirmEmail)
 
-    return { inviteModal, nameField, emailField, confirmEmailField, sendButton }
+    return { inviteModal, nameField, emailField, confirmEmailField, sendButton, handleCloseSpy }
   }
 
   describe('while requesting an invite', () => {
@@ -88,8 +92,6 @@ describe('requesting an invite', () => {
         expect(requestSpy).toHaveBeenCalledTimes(1)
       })
     })
-
-    it.todo('requesting another invite')
   })
 
   describe('failure when requesting an invite', () => {
@@ -109,7 +111,29 @@ describe('requesting an invite', () => {
       })
     })
 
-    it.todo('retrying a request')
+    describe('retrying after a failure', () => {
+      it('is successful in requesting an invite', async () => {
+        setupMock()
+        const { inviteModal, sendButton, emailField, confirmEmailField } = populateRequestForm({
+          email: 'usedemail@airwallex.com',
+          confirmEmail: 'usedemail@airwallex.com',
+        })
+
+        user.click(sendButton)
+
+        await waitFor(() => {
+          expect(inviteModal.getByText('An invite has sent to this email before. Please use another email'))
+        })
+
+        user.type(emailField, '{backspace}{backspace}{backspace}{backspace}.com.au')
+        user.type(confirmEmailField, '{backspace}{backspace}{backspace}{backspace}.com.au')
+        user.click(sendButton)
+
+        await waitFor(() => {
+          expect(screen.getByRole('dialog', { name: /all done/i })).toBeVisible()
+        })
+      })
+    })
   })
 
   describe('field errors', () => {
@@ -125,7 +149,7 @@ describe('requesting an invite', () => {
       return { inviteModal }
     }
 
-    describe('whenname', () => {
+    describe('name', () => {
       describe('when its less or equal to 3 characters', () => {
         it('shows inline error', () => {
           const { inviteModal } = subject('Name', '12')
@@ -152,12 +176,16 @@ describe('requesting an invite', () => {
         expect(inviteModal.getByRole('textbox', { name: 'Confirm email' })).toBeInvalid()
       })
     })
+    
+    describe('attempting to request an invite when request invite fields are not complete', () => {
+      it('does not make a request invite', () => {
+        const { inviteModal } = subject('Name', 'say my name')
 
-    it.todo('does not allow request to be sent if all fields not populated')
-    it.todo('if all fields not populated, does not call backend')
-    it.todo('able to retry even after success')
-    it.todo('able to retry even after failure')
-    it.todo('useRequestInvite hook to test for error cases')
-    // https://startbootstrap.com/previews/new-age/
+        const sendButton = inviteModal.getByRole('button', { name: /send/i })
+        user.click(sendButton)
+
+        expect(requestSpy).toHaveBeenCalledTimes(0)
+      })
+    })
   })
 })

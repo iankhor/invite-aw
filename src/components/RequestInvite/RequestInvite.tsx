@@ -1,11 +1,11 @@
 import React, { useState, ChangeEvent, useEffect } from 'react'
-import Modal from 'react-bootstrap/Modal'
+import { Modal, Button} from 'react-bootstrap'
 import { InviteForm as Form } from '../../types'
 import useRequestInvite from './../../hooks/useRequestInvite'
 import InviteForm from './components/InviteForm'
 
-function Success() {
-  return <div>All done !!!</div>
+function Success({ handleClose }: any) {
+  return <div>All done !!! <Button onClick={handleClose}>OK</Button></div>
 }
 
 function isBlank(str?: string) {
@@ -52,12 +52,11 @@ export default function RequestInvite({ show, handleClose }: any) {
 
   const { request, loading, success, error: serverError, reset } = useRequestInvite()
 
-  // TODO: specs for retry request
-  // function resetForm() {
-  //   setForm({})
-  //   setFormErrors({})
-  //   reset()
-  // }
+  function resetForm() {
+    setForm({})
+    setFormErrors({})
+    reset()
+  }
 
   function fieldChange(key: keyof Form) {
     return (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>): void =>
@@ -78,22 +77,18 @@ export default function RequestInvite({ show, handleClose }: any) {
   }
 
   function requestInvite() {
-    const { confirmEmail, ...payload } = form
-    request(payload)
+    const hasInteractedForm = Object.keys(formErrors || {}).length > 0
+    const isFormValid = Object.values(formErrors).every((e: any) => e.length === 0)
 
-    // TODO: specs for If the user clicks Send and one or more fields do not validate properly, the app should not contact the backend
-    // const hasInteractedForm = Object.keys(formErrors || {}).length > 0
-    // const isFormValid = Object.values(formErrors).every((e: any) => e.length === 0)
-
-    // if (hasInteractedForm && isFormValid) {
-    // const { confirmEmail, ...payload } = form
-    //   request(payload)
-    // }
+    if (hasInteractedForm && isFormValid) {
+      const { confirmEmail, ...payload } = form
+      request(payload)
+    }
   }
 
-  // useEffect(() => {
-  //   if(show) resetForm()
-  // }, [show])
+  useEffect(() => {
+    if(show) resetForm()
+  }, [show])
 
   return (
     <>
@@ -111,7 +106,7 @@ export default function RequestInvite({ show, handleClose }: any) {
         </Modal.Header>
         <Modal.Body>
           {success ? (
-            <Success />
+            <Success handleClose={handleClose}/>
           ) : (
             <InviteForm
               form={form}
