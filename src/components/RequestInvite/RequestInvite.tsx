@@ -102,7 +102,7 @@ export default function RequestInvite({ show, handleClose }: any) {
         role="dialog"
         show={show}
         onHide={handleClose}
-        animation={false}
+        centered
       >
         <Modal.Header closeButton>
           <Modal.Title id={success ? 'success' : 'request-an-invite'}>
