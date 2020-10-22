@@ -77,7 +77,8 @@ export default function RequestInvite({ show, handleClose }: any) {
   }
 
   function requestInvite() {
-    const hasInteractedForm = Object.keys(formErrors || {}).length > 0
+    //TODO: needds spec
+    const hasInteractedForm = Object.keys(formErrors || {}).length > 3
     const isFormValid = Object.values(formErrors).every((e: any) => e.length === 0)
 
     if (hasInteractedForm && isFormValid) {
