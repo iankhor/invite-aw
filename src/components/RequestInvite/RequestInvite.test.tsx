@@ -153,6 +153,11 @@ describe('requesting an invite', () => {
       })
     })
 
-    it.todo('does not allow request to be sent')
+    it.todo('does not allow request to be sent if all fields not populated')
+    it.todo('if all fields not populated, does not call backend')
+    it.todo('able to retry even after success')
+    it.todo('able to retry even after failure')
+    it.todo('useRequestInvite hook to test for error cases')
+    // https://startbootstrap.com/previews/new-age/
   })
 })
