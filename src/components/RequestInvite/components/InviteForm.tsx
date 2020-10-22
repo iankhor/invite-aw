@@ -18,6 +18,7 @@ export default function InviteForm({
         <Form.Control
           type="text"
           placeholder="Full name"
+          disabled={loading}
           value={form.name || ''}
           onChange={fieldChange('name')}
           onBlur={fieldBlur('name')}
@@ -31,6 +32,7 @@ export default function InviteForm({
         <Form.Control
           type="email"
           placeholder="Email"
+          disabled={loading}
           value={form.email || ''}
           onChange={fieldChange('email')}
           onBlur={fieldBlur('email')}
@@ -44,6 +46,7 @@ export default function InviteForm({
         <Form.Control
           type="email"
           placeholder="Confirm email"
+          disabled={loading}
           onChange={fieldChange('confirmEmail')}
           onBlur={fieldBlur('confirmEmail')}
           aria-invalid={formErrors.confirmEmail?.length > 0}
@@ -51,7 +54,7 @@ export default function InviteForm({
         />
       </Form.Group>
 
-      <Button variant="primary" block onClick={requestInvite}>
+      <Button variant="primary" block onClick={requestInvite} disabled={loading}>
         {loading ? 'Sending, please wait.' : 'Send'}
       </Button>
 
