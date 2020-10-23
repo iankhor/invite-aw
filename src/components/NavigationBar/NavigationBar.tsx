@@ -6,8 +6,8 @@ export default function NavigationBar() {
 
   return (
     <>
-      <Navbar fixed="top">
-        <img className="mr-2" src={Logo} style={{ height: '1.5rem' }}/>
+      <Navbar variant="dark" fixed="top" className="nav">
+        <img className="logo mr-2" src={Logo}/>
         <Navbar.Brand>
           Brocolli and Co.
         </Navbar.Brand>

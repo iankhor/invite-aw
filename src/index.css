@@ -1,0 +1,24 @@
+#main {
+  position: relative;
+  width: 100%;
+  padding-top: 150px;
+  padding-bottom: 100px;
+  color: white;
+  height: 95vh;
+  background: url('./images/bg-pattern.png'), #7b4397;
+  background: url('./images/bg-pattern.png'), linear-gradient(to left, #7b4397, #dc2430);
+}
+
+.nav {
+  font-family: cursive;
+}
+
+.nav > .logo {
+  height: 1.5rem;
+}
+
+.footer {
+  height: 5vh;
+  background-color: black;
+  color: white;
+}
