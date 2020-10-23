@@ -4,7 +4,7 @@ An app to request an invitation
 
 Broccoli & Co., an upcoming online service company, would like to let people to "Request an invitation" on their website.
 
-Deployed app at [link here]()
+Deployed app at [https://request-invite.herokuapp.com/](https://request-invite.herokuapp.com/)
 
 ---
 
