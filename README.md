@@ -10,9 +10,7 @@ Deployed app at [link here]()
 
 ## Animated demo below
 
-### Valid commands demo
-
----
+![](/docs/demo.gif)
 
 ## Notes
 
