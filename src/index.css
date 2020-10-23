@@ -17,6 +17,10 @@
   height: 1.5rem;
 }
 
+.modal-title {
+  font-family: cursive;
+}
+
 .footer {
   height: 5vh;
   background-color: black;

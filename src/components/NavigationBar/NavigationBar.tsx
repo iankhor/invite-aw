@@ -7,7 +7,7 @@ export default function NavigationBar() {
   return (
     <>
       <Navbar variant="dark" fixed="top" className="nav">
-        <img className="logo mr-2" src={Logo}/>
+        <img className="logo mr-2" src={Logo} alt="logo"/>
         <Navbar.Brand>
           Brocolli and Co.
         </Navbar.Brand>

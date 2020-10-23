@@ -72,6 +72,20 @@ export default function RequestInvite({ show, handleClose }: any) {
       })
   }
 
+  function validateForm(form: Form) {
+    const { name, email, confirmEmail } = form
+
+    const errors =  {
+      name: buildError(name, validatorFor('name')),
+      email: buildError(email, validatorFor('email')),
+      confirmEmail: buildError(confirmEmail, validatorFor('confirmEmail', email, confirmEmail)),
+    }
+
+    setFormErrors(errors)
+
+    return errors
+  }
+
   function fieldBlur(field: keyof Form) {
     const args = field === 'confirmEmail' ? [form.email, form.confirmEmail] : []
 
@@ -83,10 +97,9 @@ export default function RequestInvite({ show, handleClose }: any) {
   }
 
   function requestInvite() {
-    const hasInteractedForm = Object.keys(formErrors || {}).length === 3
-    const isFormValid = Object.values(formErrors).every((e: any) => e.length === 0)
+    const isFormValid = Object.values(validateForm(form)).every((e: any) => e.length === 0)
 
-    if (hasInteractedForm && isFormValid) {
+    if (isFormValid) {
       const { confirmEmail, ...payload } = form
       request(payload)
     }
@@ -94,6 +107,7 @@ export default function RequestInvite({ show, handleClose }: any) {
 
   useEffect(() => {
     if(show) resetForm()
+    // eslint-disable-next-line
   }, [show])
 
   return (
@@ -107,7 +121,7 @@ export default function RequestInvite({ show, handleClose }: any) {
       >
         <Modal.Header closeButton className="border-0">
           <Modal.Title id={success ? 'success' : 'request-an-invite'} className="w-100 text-center">
-            {success ? 'All done' : 'Request an invite'}
+            {success ? 'All done !' : 'Request an invite'}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
