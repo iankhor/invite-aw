@@ -144,7 +144,6 @@ describe('requesting an invite', () => {
 
       const field = inviteModal.getByRole('textbox', { name: fieldName })
       user.type(field, value)
-      user.tab()
 
       return { inviteModal }
     }
@@ -153,6 +152,7 @@ describe('requesting an invite', () => {
       describe('when its less or equal to 3 characters', () => {
         it('shows inline error', () => {
           const { inviteModal } = subject('Name', '12')
+          user.tab()
 
           expect(inviteModal.getByRole('textbox', { name: /name/i })).toBeInvalid()
         })
@@ -163,6 +163,8 @@ describe('requesting an invite', () => {
       describe('not entered', () => {
         it('shows inline error', () => {
           const { inviteModal } = subject('Email', '12')
+          user.tab()
+
 
           expect(inviteModal.getByRole('textbox', { name: 'Email' })).toBeInvalid()
         })
@@ -172,6 +174,7 @@ describe('requesting an invite', () => {
     describe('when email and confirm email are not the same', () => {
       it('shows inline error', () => {
         const { inviteModal } = subject('Confirm email', '12')
+        user.tab()
 
         expect(inviteModal.getByRole('textbox', { name: 'Confirm email' })).toBeInvalid()
       })
