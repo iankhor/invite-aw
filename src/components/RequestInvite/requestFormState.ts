@@ -1,5 +1,5 @@
 
-import { InviteForm, Error } from '../../types'
+import { InviteForm, Error, InviteFormErrors } from '../../types'
 
 type Validator = (value: string) => Error
 
@@ -57,6 +57,15 @@ function buildFormState(form: InviteForm, property: keyof Omit<InviteForm, 'erro
   return { ...form, [property]: value }
 }
 
+function buildFormError(form: InviteForm, property: keyof Omit<InviteForm, 'errors'>, value: string): InviteFormErrors {
+  const args = property === 'confirmEmail' ? [form.email, form.confirmEmail] : []
+
+  return {
+    ...form.errors,
+    [property]: buildError(value, validatorFor(property, ...args)),
+  }
+}
+
 export function validateForm(form: Omit<InviteForm, 'errors'>) {
   const { name, email, confirmEmail } = form
 
@@ -88,18 +97,13 @@ export default function inviteFormReducer(state: RequestInviteState , action: Ac
         ...state,
         form: buildFormState(state.form, action.property, action.value)
       }
-      
-    case 'blur':
-      const args = action.property === 'confirmEmail' ? [state.form?.email, state.form?.confirmEmail] : []
 
+    case 'blur':
       return {
         ...state,
         form: {
           ...buildFormState(state.form, action.property, action.value),
-          errors: {
-            ...state.form?.errors,
-            [action.property]: buildError(action.value, validatorFor(action.property, ...args)),
-          }
+          errors: buildFormError(state.form, action.property, action.value)
         }
       }
     case 'validate':

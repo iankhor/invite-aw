@@ -9,7 +9,7 @@ export type InviteForm = {
 
 export type Error = 'blank' | 'different' | 'short' | 'invalid'
 
-type InviteFormErrors = {
+export type InviteFormErrors = {
   name: Error[] | null
   email: Error[] | null
   confirmEmail: Error[] | null
