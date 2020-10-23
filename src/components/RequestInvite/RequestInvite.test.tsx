@@ -180,11 +180,10 @@ describe('requesting an invite', () => {
       })
     })
     
-    describe('attempting to request an invite when request invite fields are not complete', () => {
+    describe('submitting an empty request invite form', () => {
       it('does not make a request invite', () => {
-        const { inviteModal } = subject('Name', 'say my name')
-
-        const sendButton = inviteModal.getByRole('button', { name: /send/i })
+        render(<RequestInvite show={true} />)
+        const sendButton = screen.getByRole('button', { name: /send/i })
         user.click(sendButton)
 
         expect(requestSpy).toHaveBeenCalledTimes(0)
