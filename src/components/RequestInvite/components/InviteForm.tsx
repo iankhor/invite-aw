@@ -54,7 +54,7 @@ export default function InviteForm({
         />
       </Form.Group>
 
-      <Button variant="primary" block onClick={requestInvite} disabled={loading}>
+      <Button variant="success" block onClick={requestInvite} disabled={loading}>
         {loading ? 'Sending, please wait.' : 'Send'}
       </Button>
 

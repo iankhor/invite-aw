@@ -5,7 +5,13 @@ import useRequestInvite from './../../hooks/useRequestInvite'
 import InviteForm from './components/InviteForm'
 
 function Success({ handleClose }: any) {
-  return <div>All done !!! <Button onClick={handleClose}>OK</Button></div>
+  return (
+    <div className="text-center">
+      <p>You will be one of the first to experience Brocolli and Co. when we launch.</p>
+      <Button variant="success" block onClick={handleClose}>OK</Button>
+    </div>
+  )
+  
 }
 
 function isBlank(str?: string) {
@@ -99,8 +105,8 @@ export default function RequestInvite({ show, handleClose }: any) {
         onHide={handleClose}
         centered
       >
-        <Modal.Header closeButton>
-          <Modal.Title id={success ? 'success' : 'request-an-invite'}>
+        <Modal.Header closeButton className="border-0">
+          <Modal.Title id={success ? 'success' : 'request-an-invite'} className="w-100 text-center">
             {success ? 'All done' : 'Request an invite'}
           </Modal.Title>
         </Modal.Header>
