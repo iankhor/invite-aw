@@ -1,6 +1,7 @@
-import React, { useState, ChangeEvent, useEffect } from 'react'
+import React, { useState, ChangeEvent, useEffect, useReducer } from 'react'
+import inviteFormReducer, { initialFormState } from './requestFormState'
 import { Modal, Button} from 'react-bootstrap'
-import { InviteForm as Form } from '../../types'
+import { InviteForm as Form,  } from '../../types'
 import useRequestInvite from './../../hooks/useRequestInvite'
 import InviteForm from './components/InviteForm'
 
@@ -53,7 +54,7 @@ function buildError(value: any, validators: any) {
 }
 
 export default function RequestInvite({ show, handleClose }: any) {
-  const [form, setForm] = useState<Form>({})
+  const [form, setForm] = useState<any>({})
   const [formErrors, setFormErrors] = useState({})
 
   const { request, loading, success, error: serverError, reset } = useRequestInvite()
@@ -89,11 +90,12 @@ export default function RequestInvite({ show, handleClose }: any) {
   function fieldBlur(field: keyof Form) {
     const args = field === 'confirmEmail' ? [form.email, form.confirmEmail] : []
 
-    return (): void =>
+    return (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>): void => {
       setFormErrors({
         ...formErrors,
-        [field]: buildError(form[field], validatorFor(field, ...args)),
+        [field]: buildError(e.target.value, validatorFor(field, ...args)),
       })
+    }
   }
 
   function requestInvite() {
