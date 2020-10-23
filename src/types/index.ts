@@ -1,21 +1,17 @@
 export type RequestPayload = {
-  name: string
-  email: string
+  name: string | null
+  email: string | null
 }
 
 export type InviteForm = {
-  confirmEmail: string
+  confirmEmail: string | null
 } & RequestPayload & { errors: InviteFormErrors }
 
 export type Error = 'blank' | 'different' | 'short' | 'invalid'
 
 type InviteFormErrors = {
-  name: Error[]
-  email: Error[]
-  confirmEmail: Error[]
+  name: Error[] | null
+  email: Error[] | null
+  confirmEmail: Error[] | null
 }
 
-export type RequestInviteState = {
-  form: InviteForm ,
-  errors: string | ''
-}

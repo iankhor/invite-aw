@@ -1,7 +1,12 @@
 
-import { InviteForm, RequestInviteState, Error } from '../../types'
+import { InviteForm, Error } from '../../types'
 
 type Validator = (value: string) => Error
+
+export type RequestInviteState = {
+  form: InviteForm ,
+  errors: string | ''
+}
 
 export type Action =
   | { type: 'change' | 'blur'; property: 'name' | 'email' | 'confirmEmail'; value: string }

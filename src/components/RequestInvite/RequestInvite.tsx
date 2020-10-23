@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent, useEffect, useReducer } from 'react'
-import inviteFormReducer, { initialFormState } from './requestFormState'
+import inviteFormReducer, { initialFormState, RequestInviteState, Action } from './requestFormState'
 import { Modal, Button} from 'react-bootstrap'
 import { InviteForm as Form,  } from '../../types'
 import useRequestInvite from './../../hooks/useRequestInvite'
@@ -54,6 +54,7 @@ function buildError(value: any, validators: any) {
 }
 
 export default function RequestInvite({ show, handleClose }: any) {
+  const [state, dispatch] = useReducer(inviteFormReducer, initialFormState)
   const [form, setForm] = useState<any>({})
   const [formErrors, setFormErrors] = useState({})
 
