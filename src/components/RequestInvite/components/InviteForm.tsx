@@ -2,6 +2,18 @@ import React from 'react'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 
+function errorMessage(field: string, errorKey: string): string {
+  const errors = {
+    blank: `${field} is required`, 
+    short: `${field} needs at least 3 characters`, 
+    invalid: `${field} is invalid`,
+    different: `${field} is different`,
+    default: ''
+  } as Record<string, string>
+
+  return errors[errorKey] || errors.default
+}
+
 export default function InviteForm({
   form,
   fieldChange,
@@ -25,6 +37,7 @@ export default function InviteForm({
           aria-invalid={formErrors.name?.length > 0}
           isInvalid={formErrors.name?.length > 0}
         />
+        <Form.Control.Feedback type="invalid">{errorMessage('Full name', formErrors.name?.[0])}</Form.Control.Feedback>
       </Form.Group>
 
       <Form.Group controlId="email">
@@ -39,6 +52,7 @@ export default function InviteForm({
           aria-invalid={formErrors.email?.length > 0}
           isInvalid={formErrors.email?.length > 0}
         />
+        <Form.Control.Feedback type="invalid">{errorMessage('Email', formErrors.email?.[0])}</Form.Control.Feedback>
       </Form.Group>
 
       <Form.Group controlId="confirm-email">
@@ -52,6 +66,7 @@ export default function InviteForm({
           aria-invalid={formErrors.confirmEmail?.length > 0}
           isInvalid={formErrors.confirmEmail?.length > 0}
         />
+        <Form.Control.Feedback type="invalid">{errorMessage('Email', formErrors.confirmEmail?.[0])}</Form.Control.Feedback>
       </Form.Group>
 
       <Button variant="success" block onClick={requestInvite} disabled={loading}>

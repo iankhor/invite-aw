@@ -11,7 +11,6 @@ export default function Main({ requestInvite }: any) {
           <p>
             <Button variant="outline-light" onClick={requestInvite}>Request an invite</Button>
           </p>
-
         </div>
       </main>
     </>

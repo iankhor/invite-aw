@@ -32,8 +32,8 @@ function isShort(str?: string) {
 
 function validatorFor(property: string, value: string | null = null, comparedValue: string | null = null) {
   const validators = {
-    name: [isShort],
-    email: [isEmailValid],
+    name: [isBlank, isShort],
+    email: [isBlank, isEmailValid],
     confirmEmail: [() => isSameValue(value, comparedValue)],
     default: [],
   } as Record<string, any>
