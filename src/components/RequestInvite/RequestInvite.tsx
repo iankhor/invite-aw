@@ -1,5 +1,5 @@
-import React, { useState, ChangeEvent, useEffect, useReducer } from 'react'
-import inviteFormReducer, { initialFormState, RequestInviteState, Action } from './requestFormState'
+import React, { ChangeEvent, useEffect, useReducer } from 'react'
+import inviteFormReducer, { initialFormState, validateForm } from './requestFormState'
 import { Modal, Button} from 'react-bootstrap'
 import { InviteForm as Form,  } from '../../types'
 import useRequestInvite from './../../hooks/useRequestInvite'
@@ -15,95 +15,33 @@ function Success({ handleClose }: any) {
   
 }
 
-function isBlank(str?: string) {
-  return !str || (typeof str === 'string' && !str.match(/\S/gm)) ? 'blank' : null
-}
-
-function isSameValue(valueOne?: string | null, valueTwo?: string | null) {
-  return valueOne && valueTwo && valueOne === valueTwo ? null : 'different'
-}
-
-function isEmailValid(email?: string) {
-  return email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? null : 'invalid'
-}
-
-function isShort(str?: string) {
-  return str && str.length >= 3 ? null : 'short'
-}
-
-function validatorFor(property: string, value: string | null = null, comparedValue: string | null = null) {
-  const validators = {
-    name: [isBlank, isShort],
-    email: [isBlank, isEmailValid],
-    confirmEmail: [() => isSameValue(value, comparedValue)],
-    default: [],
-  } as Record<string, any>
-
-  return validators[property] || validators.default
-}
-
-function buildError(value: any, validators: any) {
-  return validators
-    .map((validator: any) => {
-      const errorKey = validator(value)
-      const hasError = errorKey !== null
-
-      return hasError ? errorKey : ''
-    })
-    .filter(Boolean)
-}
-
 export default function RequestInvite({ show, handleClose }: any) {
   const [state, dispatch] = useReducer(inviteFormReducer, initialFormState)
-  const [form, setForm] = useState<any>({})
-  const [formErrors, setFormErrors] = useState({})
-
   const { request, loading, success, error: serverError, reset } = useRequestInvite()
 
   function resetForm() {
-    setForm({})
-    setFormErrors({})
     reset()
+    dispatch({ type: 'reset' })
   }
 
-  function fieldChange(key: keyof Form) {
-    return (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>): void =>
-      setForm({
-        ...form,
-        [key]: e.target.value,
-      })
-  }
-
-  function validateForm(form: Form) {
-    const { name, email, confirmEmail } = form
-
-    const errors =  {
-      name: buildError(name, validatorFor('name')),
-      email: buildError(email, validatorFor('email')),
-      confirmEmail: buildError(confirmEmail, validatorFor('confirmEmail', email, confirmEmail)),
+  function fieldChange(field: keyof Form) {
+    return (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>): void => {
+      dispatch({ type: 'change', property: field, value: e.target.value })
     }
-
-    setFormErrors(errors)
-
-    return errors
   }
 
   function fieldBlur(field: keyof Form) {
-    const args = field === 'confirmEmail' ? [form.email, form.confirmEmail] : []
-
     return (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>): void => {
-      setFormErrors({
-        ...formErrors,
-        [field]: buildError(e.target.value, validatorFor(field, ...args)),
-      })
+      dispatch({ type: 'blur', property: field, value: e.target.value })
     }
   }
 
   function requestInvite() {
-    const isFormValid = Object.values(validateForm(form)).every((e: any) => e.length === 0)
+    dispatch({ type: 'validate' })
+    const isFormValid = Object.values(validateForm(state.form)).every((e: any) => e.length === 0)
 
     if (isFormValid) {
-      const { confirmEmail, ...payload } = form
+      const { confirmEmail, ...payload } = state.form
       request(payload)
     }
   }
@@ -132,12 +70,11 @@ export default function RequestInvite({ show, handleClose }: any) {
             <Success handleClose={handleClose}/>
           ) : (
             <InviteForm
-              form={form}
+              form={state.form}
               fieldChange={fieldChange}
               fieldBlur={fieldBlur}
               requestInvite={requestInvite}
               serverError={serverError}
-              formErrors={formErrors}
               loading={loading}
             />
           )}

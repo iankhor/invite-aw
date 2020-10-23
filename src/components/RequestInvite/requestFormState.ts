@@ -9,9 +9,10 @@ export type RequestInviteState = {
 }
 
 export type Action =
-  | { type: 'change' | 'blur'; property: 'name' | 'email' | 'confirmEmail'; value: string }
+  | { type: 'change' | 'blur'; property: any; value: string }
   | { type: 'submit'; serverErrors: string }
   | { type: 'validate' }
+  | { type: 'reset' }
   
 
 function isBlank(str: string) {
@@ -52,11 +53,11 @@ function validatorFor(property: string, value: string | null = null, comparedVal
   return validators[property] || validators.default
 }
 
-function buildFormState(form: InviteForm, property: keyof InviteForm, value: string): InviteForm {
+function buildFormState(form: InviteForm, property: keyof Omit<InviteForm, 'errors'>, value: string): InviteForm {
   return { ...form, [property]: value }
 }
 
-function validateForm(form: Omit<InviteForm, 'errors'>) {
+export function validateForm(form: Omit<InviteForm, 'errors'>) {
   const { name, email, confirmEmail } = form
 
   return {
@@ -87,6 +88,7 @@ export default function inviteFormReducer(state: RequestInviteState , action: Ac
         ...state,
         form: buildFormState(state.form, action.property, action.value)
       }
+      
     case 'blur':
       const args = action.property === 'confirmEmail' ? [state.form?.email, state.form?.confirmEmail] : []
 
@@ -108,6 +110,10 @@ export default function inviteFormReducer(state: RequestInviteState , action: Ac
           errors: validateForm(state.form)
         }
       }
+
+    case 'reset':
+      return initialFormState
+
     case 'submit':
       return {
         ...state,

@@ -19,7 +19,6 @@ export default function InviteForm({
   fieldChange,
   fieldBlur,
   requestInvite,
-  formErrors,
   serverError,
   loading,
 }: any) {
@@ -34,10 +33,10 @@ export default function InviteForm({
           value={form.name || ''}
           onChange={fieldChange('name')}
           onBlur={fieldBlur('name')}
-          aria-invalid={formErrors.name?.length > 0}
-          isInvalid={formErrors.name?.length > 0}
+          aria-invalid={form.errors.name?.length > 0}
+          isInvalid={form.errors.name?.length > 0}
         />
-        <Form.Control.Feedback type="invalid">{errorMessage('Full name', formErrors.name?.[0])}</Form.Control.Feedback>
+        <Form.Control.Feedback type="invalid">{errorMessage('Full name', form.errors.name?.[0])}</Form.Control.Feedback>
       </Form.Group>
 
       <Form.Group controlId="email">
@@ -49,10 +48,10 @@ export default function InviteForm({
           value={form.email || ''}
           onChange={fieldChange('email')}
           onBlur={fieldBlur('email')}
-          aria-invalid={formErrors.email?.length > 0}
-          isInvalid={formErrors.email?.length > 0}
+          aria-invalid={form.errors.email?.length > 0}
+          isInvalid={form.errors.email?.length > 0}
         />
-        <Form.Control.Feedback type="invalid">{errorMessage('Email', formErrors.email?.[0])}</Form.Control.Feedback>
+        <Form.Control.Feedback type="invalid">{errorMessage('Email', form.errors.email?.[0])}</Form.Control.Feedback>
       </Form.Group>
 
       <Form.Group controlId="confirm-email">
@@ -63,10 +62,10 @@ export default function InviteForm({
           disabled={loading}
           onChange={fieldChange('confirmEmail')}
           onBlur={fieldBlur('confirmEmail')}
-          aria-invalid={formErrors.confirmEmail?.length > 0}
-          isInvalid={formErrors.confirmEmail?.length > 0}
+          aria-invalid={form.errors.confirmEmail?.length > 0}
+          isInvalid={form.errors.confirmEmail?.length > 0}
         />
-        <Form.Control.Feedback type="invalid">{errorMessage('Email', formErrors.confirmEmail?.[0])}</Form.Control.Feedback>
+        <Form.Control.Feedback type="invalid">{errorMessage('Email', form.errors.confirmEmail?.[0])}</Form.Control.Feedback>
       </Form.Group>
 
       <Button variant="success" block onClick={requestInvite} disabled={loading}>
