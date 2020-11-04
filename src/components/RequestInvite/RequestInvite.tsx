@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useReducer } from 'react'
 import inviteFormReducer, { initialFormState, validateForm } from './requestFormState'
-import { Modal, Button} from 'react-bootstrap'
-import { InviteForm as Form,  } from '../../types'
+import { Modal, Button } from 'react-bootstrap'
+import { InviteForm as Form } from '../../types'
 import useRequestInvite from './../../hooks/useRequestInvite'
 import InviteForm from './components/InviteForm'
 
@@ -9,10 +9,11 @@ function Success({ handleClose }: any) {
   return (
     <div className="text-center">
       <p>You will be one of the first to experience Brocolli and Co. when we launch.</p>
-      <Button variant="success" block onClick={handleClose}>OK</Button>
+      <Button variant="success" block onClick={handleClose}>
+        OK
+      </Button>
     </div>
   )
-  
 }
 
 export default function RequestInvite({ show, handleClose }: any) {
@@ -37,7 +38,7 @@ export default function RequestInvite({ show, handleClose }: any) {
   }
 
   function requestInvite() {
-    dispatch({ type: 'validate' })
+    dispatch({ type: 'submit' })
     const isFormValid = Object.values(validateForm(state.form)).every((e: any) => e.length === 0)
 
     if (isFormValid) {
@@ -47,7 +48,7 @@ export default function RequestInvite({ show, handleClose }: any) {
   }
 
   useEffect(() => {
-    if(show) resetForm()
+    if (show) resetForm()
     // eslint-disable-next-line
   }, [show])
 
@@ -67,7 +68,7 @@ export default function RequestInvite({ show, handleClose }: any) {
         </Modal.Header>
         <Modal.Body>
           {success ? (
-            <Success handleClose={handleClose}/>
+            <Success handleClose={handleClose} />
           ) : (
             <InviteForm
               form={state.form}

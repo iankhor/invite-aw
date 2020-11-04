@@ -1,39 +1,33 @@
-
 import { InviteForm } from '../../types'
 import { buildFormState, buildFormError, validateForm } from './lib/utils'
 
 export type RequestInviteState = {
-  form: InviteForm ,
+  form: InviteForm
   errors: string | ''
 }
 
-export type Action =
-  | { type: 'change' | 'blur'; property: any; value: string }
-  | { type: 'submit'; serverErrors: string }
-  | { type: 'validate' }
-  | { type: 'reset' }
-  
+export type Action = { type: 'change' | 'blur'; property: any; value: string } | { type: 'submit' } | { type: 'reset' }
 
 export const initialFormState = {
-  form: { 
-    name: null, 
-    email: null, 
-    confirmEmail: null, 
-    errors: { 
-      name: null, 
-      email: null, 
-      confirmEmail: null 
-    } 
+  form: {
+    name: null,
+    email: null,
+    confirmEmail: null,
+    errors: {
+      name: null,
+      email: null,
+      confirmEmail: null,
+    },
   },
-  errors: ''
+  errors: '',
 }
 
-export default function inviteFormReducer(state: RequestInviteState , action: Action) {
+export default function inviteFormReducer(state: RequestInviteState, action: Action) {
   switch (action.type) {
     case 'change':
       return {
         ...state,
-        form: buildFormState(state.form, action.property, action.value)
+        form: buildFormState(state.form, action.property, action.value),
       }
 
     case 'blur':
@@ -41,26 +35,22 @@ export default function inviteFormReducer(state: RequestInviteState , action: Ac
         ...state,
         form: {
           ...buildFormState(state.form, action.property, action.value),
-          errors: buildFormError(state.form, action.property, action.value)
-        }
+          errors: buildFormError(state.form, action.property, action.value),
+        },
       }
-    case 'validate':
+
+    case 'submit':
       return {
         ...state,
         form: {
           ...state.form,
-          errors: validateForm(state.form)
-        }
+          errors: validateForm(state.form),
+        },
       }
 
     case 'reset':
       return initialFormState
 
-    case 'submit':
-      return {
-        ...state,
-        errors: action.serverErrors
-      }
     default:
       return state
   }
